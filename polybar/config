@@ -1,0 +1,292 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;==========================================================
+
+[colors]
+background = #273552
+foreground = #D8DEE9
+primary = #EBCB8B
+secondary = #D08770
+alert = #BF616A
+light = #ECEFF4
+
+[bar/megabar]
+width = 100%
+height = 27
+
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = "Iosevka Nerd Font:size=10:weight=150:antialias=true;2"
+font-1 = "Iosevka Nerd Font:style=Medium:size=11:weight=150:antialias=true;2"
+
+
+modules-left = i3
+modules-center = date
+modules-right = filesystem sep memory sep cpu sep xkeyboard sep pulseaudio sep battery sep powermenu
+
+tray-position = right
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+# ======================= CUSTOM MODULES ======================= 
+[module/sep]
+type=custom/text
+content = %{T1}|%{T-}
+
+# ======================= MODULES ======================= 
+[module/workspaces]
+type = internal/xworkspaces
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; Create click handler used to focus desktop
+; Default: true
+enable-click = true
+
+; Create scroll handlers used to cycle desktops
+; Default: true
+enable-scroll = true
+
+; icon-[0-9]+ = <desktop-name>;<icon>
+; NOTE: The desktop name needs to match the name configured by the WM
+; You can get a list of the defined desktops using:
+; $ xprop -root _NET_DESKTOP_NAMES
+icon-0 = 1;
+icon-1 = 2;
+icon-2 = 3;
+icon-3 = 4;
+icon-4 = 5;
+icon-default = 
+
+
+; Available tags:
+;   <label-monitor>
+;   <label-state> - gets replaced with <label-(active|urgent|occupied|empty)>
+; Default: <label-state>
+format = <label-state>
+
+; Available tokens:
+;   %name%
+; Default: %name%
+label-monitor = %name%
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-active = 
+label-active-foreground = ${color.foreground-alt}
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-occupied = 
+label-occupied-foreground = ${color.foreground-alt}
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-urgent = 
+label-urgent-foreground = ${color.shade2}
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-empty = 
+label-empty-foreground = ${color.foreground-alt}
+
+label-active-padding = 1
+label-urgent-padding = 1
+label-occupied-padding = 1
+label-empty-padding = 1
+
+
+
+
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+; focused = Active workspace on focused monitor
+label-focused = " %index% "
+label-focused-background = ${colors.foreground}
+label-focused-foreground = ${colors.background}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 0
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = " %index% "
+label-unfocused-padding = 0
+
+; visible = Active workspace on unfocused monitor
+label-visible = " %index% "
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = " %index% "
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 0
+
+; Separator in between workspaces
+; label-separator = |
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix = %{T2} %{T-}
+format-prefix-foreground = ${colors.foreground}
+
+label-layout = %layout%
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = "%{T2} %{T-} %percentage_used%%"
+label-mounted-foreground = ${colors.foreground}
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = "%{T2}%{T-} "
+format-prefix-foreground = ${colors.foreground}
+format-underline = ${colors.light}
+label = %percentage:2%%
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "%{T2}%{T-} "  
+format-prefix-foreground = ${colors.foreground}
+format-underline = ${colors.light}
+label = %percentage_used%%
+
+[module/wlan]
+type = internal/network
+interface = wlp2s0
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+format-connected-underline = ${colors.light} 
+label-connected = %essid%
+
+format-disconnected = "%{T2}%{T-}"
+
+ramp-signal-0 = "%{T2}%{T-}"
+ramp-signal-foreground = ${colors.foreground}
+
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%d %b %Y"
+date-alt = "%d %b %Y"
+
+time = " %H:%M"
+time-alt = " %H:%M"
+
+
+format-prefix-foreground = ${colors.foreground}
+format-underline = ${colors.light}
+
+label = %date% | Time: %time%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = %{T2}墳%{T-} <label-volume> 
+label-volume = %percentage%%
+label-volume-foreground = ${root.foreground}
+format-volume-underline = ${colors.light}
+
+label-muted = %{T2}婢%{T-} Muted
+label-muted-foreground = ${colors.foreground}
+label-muted-underline = ${colors.light}
+
+[module/battery]
+type = internal/battery
+
+full-at = 99
+
+battery = BAT0
+adapter = ACAD
+
+poll-interval = 2
+
+time-format = %H:%M
+
+format-charging = <animation-charging> <label-charging>
+format-charging-background = ${color.shade4}
+format-charging-padding = 1
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-background = ${color.shade4}
+format-discharging-padding = 1
+
+format-full = <label-full>
+format-full-prefix = 
+format-full-background = ${color.shade4}
+format-full-padding = 1
+
+label-charging = "%percentage%%"
+
+label-discharging = "%percentage%%"
+
+label-full = " Full "
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+
+animation-charging-framerate = 750
+
+[module/powermenu]
+type = custom/menu
+
+ 
