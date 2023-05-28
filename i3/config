@@ -2,14 +2,13 @@
 
 #exec --no-startup-id nitrogen ~/.wallpappers/gruvbox.jpg
 exec_always --no-startup-id picom
-exec_always --no-startup-id feh --bg-scale /home/chugunok/Pictures/wallpapers/verycoolshtuka.jpg
+exec_always --no-startup-id feh --bg-scale /home/chugunok/Pictures/wallpapers/broken_green.jpg
 
 exec_always --no-startup-id ~/.config/polybar/launch.sh
 exec --no-startup-id setxkbmap -model pc105 -layout us,ru -option grp:win_space_toggle
 
 
-bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-2/launcher.sh
-
+bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-3/launcher.sh
 bindsym $mod+Ctrl+z exec --no-startup-id ~/.config/rofi/applets/bin/powermenu.sh
 
 
@@ -17,16 +16,16 @@ bindsym XF86KbdBrightnessUp exec --no-startup-id "light -U 1"
 bindsym XF86KbdBrightnessDown exec --no-startup-id "light -A 1"
 
 exec --no-startup-id betterlockscreen -u $HOME/.wallpapers/mountains.jpg
+
 # Lock
 bindsym $mod+p exec betterlockscreen -l dim
 
-
-
 # Screenshots
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
-bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
+bindsym Print exec --no-startup-id flameshot gui
+#bindsym Print exec --no-startup-id i3-scrot
+#bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
+#bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+#bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 
 ## Clipboard Screenshots
 bindsym Ctrl+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
@@ -51,7 +50,6 @@ font pango:monospace 8
 
 exec --no-startup-id dex --autostart --environment i3
 
-exec --no-startup-id nm-applet
 
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
@@ -141,11 +139,12 @@ exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
 exec --no-startup-id clipit
 exec --no-startup-id start_conky_maia
-exec --no-startup-id xautolock -time 2 -locker blurlock
+#exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
+exec --no-startup-id dunst
 
-
+bindsym $mod+Ctrl+s exec --no-startup-id ~/.config/startserver.sh
 
 
 

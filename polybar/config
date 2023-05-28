@@ -12,18 +12,25 @@
 ;==========================================================
 
 [colors]
-background = #273552
-foreground = #D8DEE9
+background = #000000
+#13360e
+foreground = #ffffff
+#ace8a2
 primary = #EBCB8B
 secondary = #D08770
 alert = #BF616A
 light = #ECEFF4
+
+
 
 [bar/megabar]
 width = 100%
 height = 27
 
 fixed-center = true
+
+line-size = 3
+
 
 background = ${colors.background}
 foreground = ${colors.foreground}
@@ -143,11 +150,15 @@ wrapping-scroll = false
 label-focused = " %index% "
 label-focused-background = ${colors.foreground}
 label-focused-foreground = ${colors.background}
-label-focused-underline= ${colors.primary}
+label-focused-underline= #398839
+#61a356
 label-focused-padding = 0
 
 ; unfocused = Inactive workspace on any monitor
 label-unfocused = " %index% "
+#label-unfocused-background = ${colors.background}
+label-unfocused-foreground = #d2edce
+#label-unfocused-underline= ${colors.primary}
 label-unfocused-padding = 0
 
 ; visible = Active workspace on unfocused monitor
@@ -187,7 +198,6 @@ type = internal/cpu
 interval = 2
 format-prefix = "%{T2}%{T-} "
 format-prefix-foreground = ${colors.foreground}
-format-underline = ${colors.light}
 label = %percentage:2%%
 
 [module/memory]
@@ -195,7 +205,6 @@ type = internal/memory
 interval = 2
 format-prefix = "%{T2}%{T-} "  
 format-prefix-foreground = ${colors.foreground}
-format-underline = ${colors.light}
 label = %percentage_used%%
 
 [module/wlan]
@@ -235,7 +244,6 @@ type = internal/pulseaudio
 format-volume = %{T2}墳%{T-} <label-volume> 
 label-volume = %percentage%%
 label-volume-foreground = ${root.foreground}
-format-volume-underline = ${colors.light}
 
 label-muted = %{T2}婢%{T-} Muted
 label-muted-foreground = ${colors.foreground}
@@ -288,5 +296,7 @@ animation-charging-framerate = 750
 
 [module/powermenu]
 type = custom/menu
+
+
 
  
