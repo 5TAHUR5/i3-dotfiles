@@ -1,6 +1,6 @@
 ;==========================================================
-;
-;
+;		
+;					
 ;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
 ;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
 ;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
@@ -44,102 +44,23 @@ font-1 = "Iosevka Nerd Font:style=Medium:size=11:weight=150:antialias=true;2"
 
 modules-left = i3
 modules-center = date
-modules-right = filesystem sep memory sep cpu sep xkeyboard sep pulseaudio sep battery sep powermenu
+modules-right = network sep open_filesystem filesystem sep mem_window memory sep cpu_window cpu sep xkeyboard sep battery sep powermenu
 
 tray-position = right
 
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+
+
 # ======================= CUSTOM MODULES ======================= 
 [module/sep]
 type=custom/text
 content = %{T1}|%{T-}
 
+
+
 # ======================= MODULES ======================= 
-[module/workspaces]
-type = internal/xworkspaces
-
-; Only show workspaces defined on the same output as the bar
-;
-; Useful if you want to show monitor specific workspaces
-; on different bars
-;
-; Default: false
-pin-workspaces = true
-
-; Create click handler used to focus desktop
-; Default: true
-enable-click = true
-
-; Create scroll handlers used to cycle desktops
-; Default: true
-enable-scroll = true
-
-; icon-[0-9]+ = <desktop-name>;<icon>
-; NOTE: The desktop name needs to match the name configured by the WM
-; You can get a list of the defined desktops using:
-; $ xprop -root _NET_DESKTOP_NAMES
-icon-0 = 1;
-icon-1 = 2;
-icon-2 = 3;
-icon-3 = 4;
-icon-4 = 5;
-icon-default = 
-
-
-; Available tags:
-;   <label-monitor>
-;   <label-state> - gets replaced with <label-(active|urgent|occupied|empty)>
-; Default: <label-state>
-format = <label-state>
-
-; Available tokens:
-;   %name%
-; Default: %name%
-label-monitor = %name%
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-active = 
-label-active-foreground = ${color.foreground-alt}
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-occupied = 
-label-occupied-foreground = ${color.foreground-alt}
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-urgent = 
-label-urgent-foreground = ${color.shade2}
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-empty = 
-label-empty-foreground = ${color.foreground-alt}
-
-label-active-padding = 1
-label-urgent-padding = 1
-label-occupied-padding = 1
-label-empty-padding = 1
-
-
-
-
-
 [module/i3]
 type = internal/i3
 format = <label-state> <label-mode>
@@ -190,36 +111,54 @@ interval = 25
 
 mount-0 = /
 
-label-mounted = "%{T2} %{T-} %percentage_used%%"
+label-mounted = "%percentage_used%%"
 label-mounted-foreground = ${colors.foreground}
+
+
+[module/open_filesystem]
+type = custom/text
+content = %{T2} %{T-}
+content-foreground = ${color.white}
+click-left = exec python3 ~/.config/polybar/scripts/filesystem/filesystem.py
+
+[module/network]
+type = internal/network
+interface = wlo1
+interval = 1.0
+label-connected = "%downspeed% ▲▼ %upspeed%"
+label-disconnected = disconnected
+label-connected-background = ${color.background}
+
+
 
 [module/cpu]
 type = internal/cpu
-interval = 2
-format-prefix = "%{T2}%{T-} "
-format-prefix-foreground = ${colors.foreground}
-label = %percentage:2%%
+interval = 1
+format = <label>
+format-background = ${color.shade8}
+format-foreground = ${color.foreground}
+label = "%percentage%%"
+
+[module/cpu_window]
+type = custom/text
+content = 
+content-foreground = ${color.white}
+click-left = exec python3 ~/.config/polybar/scripts/state/state.py CPU
+
 
 [module/memory]
 type = internal/memory
-interval = 2
-format-prefix = "%{T2}%{T-} "  
-format-prefix-foreground = ${colors.foreground}
+interval = 1
 label = %percentage_used%%
 
-[module/wlan]
-type = internal/network
-interface = wlp2s0
-interval = 3.0
+[module/mem_window]
+type = custom/text
+content = 
+content-foreground = ${color.white}
+click-left = exec python3 ~/.config/polybar/scripts/state/state.py MEM
 
-format-connected = <ramp-signal> <label-connected>
-format-connected-underline = ${colors.light} 
-label-connected = %essid%
 
-format-disconnected = "%{T2}%{T-}"
 
-ramp-signal-0 = "%{T2}%{T-}"
-ramp-signal-foreground = ${colors.foreground}
 
 
 [module/date]
@@ -249,6 +188,88 @@ label-muted = %{T2}婢%{T-} Muted
 label-muted-foreground = ${colors.foreground}
 label-muted-underline = ${colors.light}
 
+
+
+[module/alsa]
+type = internal/alsa
+
+; Soundcard to be used
+; Usually in the format hw:# where # is the card number
+; You can find the different card numbers in `/proc/asound/cards`
+master-soundcard = default
+speaker-soundcard = default
+headphone-soundcard = default
+
+; Name of the master, speaker and headphone mixers
+; Use the following command to list available mixer controls:
+; $ amixer scontrols | sed -nr "s/.*'([[:alnum:]]+)'.*/\1/p"
+; If master, speaker or headphone-soundcard isn't the default, 
+; use `amixer -c # scontrols` instead where # is the number 
+; of the master, speaker or headphone soundcard respectively
+;
+; Default: Master
+master-mixer = Master
+
+; Optionally define speaker and headphone mixers
+; Default: none
+;;speaker-mixer = Speaker
+; Default: none
+;;headphone-mixer = Headphone
+
+; NOTE: This is required if headphone_mixer is defined
+; Use the following command to list available device controls
+; $ amixer controls | sed -r "/CARD/\!d; s/.*=([0-9]+).*name='([^']+)'.*/printf '%3.0f: %s\n' '\1' '\2'/e" | sort
+; You may also need to use `amixer -c # controls` as above for the mixer names
+; Default: none
+;;headphone-id = 9
+
+; Use volume mapping (similar to amixer -M and alsamixer), where the increase in volume is linear to the ear
+; Default: false
+;;mapped = true
+
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+interval = 5
+
+; Available tags:
+;   <label-volume> (default)
+;   <ramp-volume>
+;   <bar-volume>
+format-volume = <ramp-volume> <label-volume>
+format-volume-background = ${color.shade6}
+format-volume-padding = 2
+
+; Available tags:
+;   <label-muted> (default)
+;   <ramp-volume>
+;   <bar-volume>
+format-muted = <label-muted>
+format-muted-prefix = 
+format-muted-prefix-font = 2
+format-muted-background = ${color.shade6}
+format-muted-padding = 2
+
+; Available tokens:
+;   %percentage% (default)
+label-volume = %percentage%%
+
+; Available tokens:
+;   %percentage% (default
+label-muted = " Muted"
+label-muted-foreground = ${color.foreground}
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-font = 2
+
+; If defined, it will replace <ramp-volume> when
+; headphones are plugged in to `headphone_control_numid`
+; If undefined, <ramp-volume> will be used for both
+; Only applies if <ramp-volume> is used
+ramp-headphones-0 = 
+
 [module/battery]
 type = internal/battery
 
@@ -257,28 +278,28 @@ full-at = 99
 battery = BAT0
 adapter = ACAD
 
-poll-interval = 2
+poll-interval = 0
 
 time-format = %H:%M
 
 format-charging = <animation-charging> <label-charging>
 format-charging-background = ${color.shade4}
-format-charging-padding = 1
+format-charging-padding = 0
 
 format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-background = ${color.shade4}
-format-discharging-padding = 1
+format-discharging-padding = 0
 
 format-full = <label-full>
 format-full-prefix = 
 format-full-background = ${color.shade4}
-format-full-padding = 1
+format-full-padding = 0
 
 label-charging = "%percentage%%"
 
 label-discharging = "%percentage%%"
 
-label-full = " Full "
+label-full = " Full"
 
 ramp-capacity-0 = 
 ramp-capacity-1 = 
@@ -294,8 +315,36 @@ animation-charging-4 = 
 
 animation-charging-framerate = 750
 
-[module/powermenu]
-type = custom/menu
+
+
+[module/backlight]
+;type = internal/xbacklight
+type = internal/backlight
+
+; Use the following command to list available cards:
+; $ ls -1 /sys/class/backlight/
+;card = intel_backlight
+card = amdgpu_bl0
+
+; Available tags:
+;   <label> (default)
+;   <ramp>
+;   <bar>
+format = <ramp> <label>
+format-background = ${color.shade3}
+format-padding = 0
+
+; Available tokens:
+;   %percentage% (default)
+label = %percentage%%
+
+; Only applies if <ramp> is used
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+ramp-font = 2
 
 
 

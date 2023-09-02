@@ -1,0 +1,1 @@
+ps -eo user,pid,ppid,%mem,%cpu,comm --sort=-%mem | grep $USER | awk '$4!=0{print $0}' | awk '$6!="ps"{print $0}' | awk '{$1="";$3="";$5=""; print $0}' | awk '{print $1 "|" $2 "|" substr($0, index($0,$3))}'
